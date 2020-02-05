@@ -1,0 +1,36 @@
+#nav a {
+    font-weight: bold;
+    color: lightgray;
+    margin: fill;
+}
+
+#nav a:active {
+    color: #f1f7f4;
+    background-color: limegreen;
+}
+
+.nav-item a:hover {
+    background-color: darkslategray;
+}
+
+.form-input-error {
+    color: red;
+}
+
+html, body {
+    height: 100%;
+}
+
+.container {
+    min-height: 100%;
+    padding-bottom: 50px;
+}
+
+footer {
+    background-color: lightgray;
+    text-align: center;
+    position: relative;
+    height: 50px;
+    margin-top: -50px;
+    clear: both;
+}
