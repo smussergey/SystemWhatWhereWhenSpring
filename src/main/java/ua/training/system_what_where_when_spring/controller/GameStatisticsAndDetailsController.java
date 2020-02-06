@@ -39,38 +39,30 @@ public class GameStatisticsAndDetailsController {
         this.userService = userService;
     }
 
-//    @GetMapping("/player/games/statistics")
-//    public String getGamesStatisticsForPlayer(@PageableDefault(sort = "date", size = DEFAULT_PAGINATION_SIZE, direction = Sort.Direction.DESC)
-//                                                          Pageable pageable, Model model, Principal principal) {
-//        try {
-//            Page<GameDTO> gameDTOs = gameStatisticsAndDetailsService.getGamesStatisticsByLoggedInPlayer(principal, pageable);
-//            model.addAttribute("gameDTOs", gameDTOs);
-//        } catch (EntityNotFoundException ex) { // TODO chech if it should be here
-//            log.warn("IN getGamesStatistics - cannot find games statistics for logged in user");
-//        }
-//        setLocalizedLoggedInUserName(model);
-//        setCurrentLocaleLanguage(model);
-//        return GAMES_STATISTICS_PAGE_PLAYER;
-//    }
+    @GetMapping("/player/games/statistics")
+    public String getGamesStatisticsForPlayer(@PageableDefault(sort = "date", size = DEFAULT_PAGINATION_SIZE, direction = Sort.Direction.DESC)
+                                                      Pageable pageable, Model model, Principal principal) {
+        Page<GameDTO> gameDTOs = gameStatisticsAndDetailsService.getGamesStatisticsByLoggedInPlayer(principal, pageable);
+        model.addAttribute("gameDTOs", gameDTOs);
+        setLocalizedLoggedInUserName(model);
+        setCurrentLocaleLanguage(model);
+        return GAMES_STATISTICS_PAGE_PLAYER;
+    }
 
-//    @GetMapping("/player/games/{id}") //TODO check user can get info only on his game
-//    public String getGameDetailsForPlayer(Model model, @PathVariable Long id) {
-//        GameDTO gameDTO = gameStatisticsAndDetailsService.getGameFullStatisticsById(id);
-//        model.addAttribute("gameDTO", gameDTO);
-//        setLocalizedLoggedInUserName(model);
-//        setCurrentLocaleLanguage(model);
-//        return GAME_DETAILS_PAGE_PLAYER;
-//    }
+    @PostMapping("/player/games/details")
+    public String getGameDetailsForPlayer(@RequestParam(value = "gameid", required = true) Long gameId, Model model) {
+        GameDTO gameDTO = gameStatisticsAndDetailsService.getGameFullStatisticsById(gameId);
+        model.addAttribute("gameDTO", gameDTO);
+        setLocalizedLoggedInUserName(model);
+        setCurrentLocaleLanguage(model);
+        return GAME_DETAILS_PAGE_PLAYER;
+    }
 
     @GetMapping("/referee/games/statistics")
     public String getGamesStatisticsForReferee(@PageableDefault(sort = "date", size = DEFAULT_PAGINATION_SIZE, direction = Sort.Direction.DESC)
                                                        Pageable pageable, Model model) {
-//        try {
         Page<GameDTO> gameDTOs = gameStatisticsAndDetailsService.getGameStatisticsByAllGamesAndPlayers(pageable);
         model.addAttribute("gameDTOs", gameDTOs);
-//        } catch (EntityNotFoundException ex) { // TODO chech if it should be here
-//            log.warn("IN getGamesStatistics - cannot find games statistics for logged in user");
-//        }
         setLocalizedLoggedInUserName(model);
         setCurrentLocaleLanguage(model);
         return GAMES_STATISTICS_PAGE_REFEREE;
@@ -78,8 +70,6 @@ public class GameStatisticsAndDetailsController {
 
     @PostMapping("/referee/games/details")
     public String getGameDetailsForReferee(@RequestParam(value = "gameid", required = true) Long gameId, Model model) {
-//        log.warn(userRegistrationDTO.getEmail() + " email is already exist");
-
         GameDTO gameDTO = gameStatisticsAndDetailsService.getGameFullStatisticsById(gameId);
         model.addAttribute("gameDTO", gameDTO);
         model.addAttribute("appealStageFiled",

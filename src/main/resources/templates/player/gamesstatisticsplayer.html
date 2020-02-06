@@ -83,15 +83,18 @@
             <tbody>
             <tr th:each="gameDTO: ${gameDTOs}">
                 <td th:text="${gameDTO.date}"></td>
-                <td><span th:if="${lang.equals('en')}" th:text="${gameDTO.getFirstPlayerNameEn}"></span>
-                    <span th:if="${lang.equals('ua')}" th:text="${gameDTO.getFirstPlayerNameUa}"></span></td>
-                <td><span th:if="${lang.equals('en')}" th:text="${gameDTO.getSecondPlayerNameEn}"></span>
+                <td><span th:if="${lang.equals('en')}" th:text="${gameDTO.firstPlayerNameEn}"></span>
+                    <span th:if="${lang.equals('ua')}" th:text="${gameDTO.firstPlayerNameUa}"></span></td>
+                <td><span th:if="${lang.equals('en')}" th:text="${gameDTO.secondPlayerNameEn}"></span>
                     <span th:if="${lang.equals('ua')}" th:text="${gameDTO.secondPlayerNameUa}"></span></td>
                 <td th:text="${gameDTO.scores}"></td>
                 <td th:text="${gameDTO.appealStage}"></td>
                 <td>
-                    <a th:href="@{|/player/games/${gameDTO.id}|}"
-                       th:text="#{games.statistics.link.label.get}"></a>
+                    <form th:action="@{/player/games/details}" method="post">
+                        <input type="hidden" name="gameid" th:value="${gameDTO.id}">
+                        <button class="button" type="submit"
+                                th:text="#{games.statistics.button.label.get}"></button>
+                    </form>
                 </td>
             </tr>
             </tbody>

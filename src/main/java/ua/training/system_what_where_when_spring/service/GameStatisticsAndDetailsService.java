@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 import ua.training.system_what_where_when_spring.dto.QuestionDTO;
 import ua.training.system_what_where_when_spring.dto.GameDTO;
 import ua.training.system_what_where_when_spring.entity.Game;
+import ua.training.system_what_where_when_spring.entity.User;
 import ua.training.system_what_where_when_spring.exception.EntityNotFoundException;
 import ua.training.system_what_where_when_spring.repository.GameRepository;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,11 +36,12 @@ public class GameStatisticsAndDetailsService {
                 .map(gameDTOService::toGameDTO);
     }
 
-//    public Page<GameDTO> getGamesStatisticsByLoggedInPlayer(Principal principal, Pageable pageable) throws EntityNotFoundException {
-//        //TODO improve with Principal
-//        return gameRepository.findAllByUsers(userService.findLoggedIndUser(), pageable)
-//                .map(gameDTOService::toGameDTO);
-//    }
+    public Page<GameDTO> getGamesStatisticsByLoggedInPlayer(Principal principal, Pageable pageable) throws EntityNotFoundException {
+        //TODO improve with Principal
+        User player = userService.findUserByLogin(principal.getName());
+        return gameRepository.findAllByFirstPlayerOrSecondPlayer(player, player, pageable)
+                .map(gameDTOService::toGameDTO);
+    }
 
     //    TODO forbid logged user to see not his game results
     public GameDTO getGameFullStatisticsById(Long id) {
