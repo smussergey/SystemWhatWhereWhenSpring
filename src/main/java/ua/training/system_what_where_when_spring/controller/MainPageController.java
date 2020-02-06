@@ -34,12 +34,12 @@ public class MainPageController {
         setCurrentLocaleLanguage(model);
 
         if (principal == null) {
-            log.info("-----------------------IN getMainPage - principal: {}", principal);
+            log.info("IN MainPageController - principal: {}", principal);
             return HOME_PAGE_DEFAULT;
         }
 
-        Role role = userService.findLoggedIndUser().getRole(); // TODO check if principal can be used instead of userService.findLoggedIndUser()
-        log.info("-----------------------IN getMainPage - role: {}", role.name());
+        Role role = userService.findUserByLogin(principal.getName()).getRole();
+        log.info("IN MainPageController - principal logged with name {} and role {}", principal.getName(), role.name());
         switch (role) {
             case ROLE_PLAYER:
                 return REDIRECT_HOME_PAGE_PLAYER;
@@ -56,7 +56,7 @@ public class MainPageController {
     }
 
     @GetMapping("/player/home")
-    public String getUserHomePage(Model model) {
+    public String getHomePagePLAYER(Model model) {
         setLocalizedLoggedInUserName(model);
         setCurrentLocaleLanguage(model);
         return HOME_PAGE_PLAYER;

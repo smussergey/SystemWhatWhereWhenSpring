@@ -21,7 +21,7 @@ public class UserRegistrationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User register(UserRegistrationDTO userRegistrationDto) {
+    public User registerNewUser(UserRegistrationDTO userRegistrationDto) {
         User user;
         user = User.builder()
                 .nameUa(userRegistrationDto.getNameUa())
@@ -30,9 +30,9 @@ public class UserRegistrationService {
                 .password(passwordEncoder.encode(userRegistrationDto.getPassword()))
                 .role(Role.ROLE_PLAYER)
                 .build();
+
         User registeredUser = userRepository.save(user);
         log.info("IN register - user: {} successfully registered", registeredUser);
-
         return registeredUser;
     }
 }

@@ -26,6 +26,7 @@ public class Appeal {
     @Column(name = "appeal_stage")
     private AppealStage appealStage;
 
+
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
@@ -34,12 +35,5 @@ public class Appeal {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Setter(AccessLevel.PRIVATE)
-    @OneToMany(mappedBy = "appeal", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    private List<AnsweredQuestion> appealedQuestions = new ArrayList<>();
-
-    public void addAnsweredQuestions(List<AnsweredQuestion> answeredQuestions) {
-        this.appealedQuestions.addAll(answeredQuestions);
-        answeredQuestions.forEach(answeredQuestion -> answeredQuestion.setAppeal(this));
-    }
 }
+

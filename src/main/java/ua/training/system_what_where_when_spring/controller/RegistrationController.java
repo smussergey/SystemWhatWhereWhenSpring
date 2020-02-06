@@ -16,6 +16,7 @@ import javax.validation.Valid;
 @Controller
 public class RegistrationController {
     private final static String REGISTRATION_PAGE = "registration";
+    private final static String REDIRECT_LOGIN_PAGE = "redirect:/login";
     private final static String LOGIN_PAGE = "login";
 
     private UserRegistrationService userRegistrationService;
@@ -26,30 +27,31 @@ public class RegistrationController {
 
     @GetMapping("/registration")
     public String registration(Model model) {
-        setCurrentLocaleLanguage(model);
+        addCurrentLocaleLanguageAttributeToModel(model);
         return REGISTRATION_PAGE;
     }
 
     @PostMapping("/registration")
-    public String registrer(@ModelAttribute("newuser") @Valid UserRegistrationDTO userRegistrationDTO,
-                            Errors errors, Model model) {
+    public String registerNewUser(@ModelAttribute("newuser") @Valid UserRegistrationDTO userRegistrationDTO,
+                                  Errors errors, Model model) {
         if (!errors.hasErrors()) {
             try {
-                userRegistrationService.register(userRegistrationDTO);
-                setCurrentLocaleLanguage(model);
-                return LOGIN_PAGE;
+                userRegistrationService.registerNewUser(userRegistrationDTO);
+                return REDIRECT_LOGIN_PAGE;
             } catch (Exception ex) {
-                log.info(userRegistrationDTO.getEmail() + " email is already exist");
+                log.warn(userRegistrationDTO.getEmail() + " email is already exist");
+                addCurrentLocaleLanguageAttributeToModel(model);
                 model.addAttribute("emailerror", "registration.message.login.already.exists");
                 return REGISTRATION_PAGE;
             }
         }
-
+        addCurrentLocaleLanguageAttributeToModel(model);
         model.addAttribute("fielderrors", ValidationErrorBuilder.fromBindingErrors(errors).getErrors());
         return REGISTRATION_PAGE;
     }
 
-    private Model setCurrentLocaleLanguage(Model model) {
+
+    private Model addCurrentLocaleLanguageAttributeToModel(Model model) {
         model.addAttribute("lang", LocaleContextHolder.getLocale().getLanguage());
         return model;
     }

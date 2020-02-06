@@ -68,7 +68,6 @@
                 <input type="text" class="form-control" id="nameUa"
                        th:placeholder="#{registartion.label.placeholder.nameUa}"
                        name="nameUa">
-                <!--        TODO put  required -->
             </div>
 
             <div class="form-group">
@@ -76,20 +75,19 @@
                 <input type="text" class="form-control" id="nameEn"
                        th:placeholder="#{registartion.label.placeholder.nameEn}"
                        name="nameEn">
-                <!--        TODO put  required -->
             </div>
 
             <div class="form-group">
                 <label th:text="#{registartion.label.login}" for="email"></label>
                 <input type="text" class="form-control" id="email"
                        th:placeholder="#{registartion.label.placeholder.email}"
-                       name="email" required>
+                       name="email">
             </div>
 
             <div class=" form-group">
                 <label th:text="#{registartion.label.password}" for="password"></label>
                 <input type="password" class="form-control" id="password"
-                       th:placeholder="#{registartion.label.placeholder.password}" name="password" required>
+                       th:placeholder="#{registartion.label.placeholder.password}" name="password">
             </div>
             <button type="submit" class="btn btn-primary" th:text="#{registration.label.button}"></button>
         </form>

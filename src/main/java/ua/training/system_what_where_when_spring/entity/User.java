@@ -35,9 +35,9 @@ public class User {
     @Column(name = "role")
     private Role role;
 
-    @Setter(AccessLevel.PRIVATE)
-    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
-    private List<Game> games = new ArrayList<>();
+//    @Setter(AccessLevel.PRIVATE)
+//    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+//    private List<Game> games = new ArrayList<>();
 
     @Override
     public String toString() {
