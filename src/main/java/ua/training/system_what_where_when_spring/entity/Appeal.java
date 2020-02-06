@@ -1,13 +1,18 @@
 package ua.training.system_what_where_when_spring.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 //TODO add constraints
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "appeal")
 public class Appeal {
     @Id
@@ -22,7 +27,6 @@ public class Appeal {
     @Column(name = "appeal_stage")
     private AppealStage appealStage;
 
-
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
@@ -31,5 +35,13 @@ public class Appeal {
     @JoinColumn(name = "user_id")
     private User user;
 
-}
+    @Setter(AccessLevel.PRIVATE)
+    @OneToMany(mappedBy = "appeal", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    private List<AppealedQuestion> appealedQuestions = new ArrayList<>();
 
+    public void addAppealedQuestions(List<AppealedQuestion> appealedQuestions) {
+        this.appealedQuestions.addAll(appealedQuestions);
+        appealedQuestions.forEach(answeredQuestion -> answeredQuestion.setAppeal(this));
+
+    }
+}

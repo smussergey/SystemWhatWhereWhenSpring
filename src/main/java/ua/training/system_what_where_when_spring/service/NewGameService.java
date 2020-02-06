@@ -50,10 +50,12 @@ public class NewGameService {
 
         List<Question> questions = generateQuestionsUntillMaxNumberOfScoresIsReached(firstPlayer, secondPlayer, maxNumberOfScoresToFinishGame);
 
-        Game game = new Game();
-        game.setDate(LocalDate.now());
-        game.setFirstPlayer(firstPlayer);
-        game.setSecondPlayer(secondPlayer);
+        Game game = Game.builder()
+                .date(LocalDate.now())
+                .firstPlayer(firstPlayer)
+                .secondPlayer(secondPlayer)
+                .questions(new ArrayList<>())
+                .build();
 //        System.out.println("------------------------" + game.getFirstPlayer());
 //        System.out.println("------------------------" + game.getQuestions().size());
         game.addQuestions(questions);

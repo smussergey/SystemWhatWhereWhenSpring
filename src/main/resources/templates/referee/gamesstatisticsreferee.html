@@ -93,7 +93,7 @@
                 <td th:text="${gameDTO.scores}"></td>
                 <td th:text="${gameDTO.appealStage}"></td>
                 <td>
-                    <form th:action="@{/referee/games/details}" method="post">
+                    <form th:action="@{/referee/game/details}" method="post">
                         <input type="hidden" name="gameid" th:value="${gameDTO.id}">
                         <button class="button" type="submit"
                                 th:text="#{games.statistics.button.label.get}"></button>

@@ -9,11 +9,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.training.system_what_where_when_spring.dto.GameDTO;
-import ua.training.system_what_where_when_spring.exception.EntityNotFoundException;
 import ua.training.system_what_where_when_spring.entity.AppealStage;
 import ua.training.system_what_where_when_spring.entity.User;
 import ua.training.system_what_where_when_spring.service.GameStatisticsAndDetailsService;
@@ -42,16 +40,16 @@ public class GameStatisticsAndDetailsController {
     @GetMapping("/player/games/statistics")
     public String getGamesStatisticsForPlayer(@PageableDefault(sort = "date", size = DEFAULT_PAGINATION_SIZE, direction = Sort.Direction.DESC)
                                                       Pageable pageable, Model model, Principal principal) {
-        Page<GameDTO> gameDTOs = gameStatisticsAndDetailsService.getGamesStatisticsByLoggedInPlayer(principal, pageable);
+        Page<GameDTO> gameDTOs = gameStatisticsAndDetailsService.getGamesStatisticsForLoggedInPlayer(pageable, principal);
         model.addAttribute("gameDTOs", gameDTOs);
         setLocalizedLoggedInUserName(model);
         setCurrentLocaleLanguage(model);
         return GAMES_STATISTICS_PAGE_PLAYER;
     }
 
-    @PostMapping("/player/games/details")
+    @PostMapping("/player/game/details")
     public String getGameDetailsForPlayer(@RequestParam(value = "gameid", required = true) Long gameId, Model model) {
-        GameDTO gameDTO = gameStatisticsAndDetailsService.getGameFullStatisticsById(gameId);
+        GameDTO gameDTO = gameStatisticsAndDetailsService.getGameFullStatisticsByIdForPlayer(gameId);
         model.addAttribute("gameDTO", gameDTO);
         setLocalizedLoggedInUserName(model);
         setCurrentLocaleLanguage(model);
@@ -61,16 +59,16 @@ public class GameStatisticsAndDetailsController {
     @GetMapping("/referee/games/statistics")
     public String getGamesStatisticsForReferee(@PageableDefault(sort = "date", size = DEFAULT_PAGINATION_SIZE, direction = Sort.Direction.DESC)
                                                        Pageable pageable, Model model) {
-        Page<GameDTO> gameDTOs = gameStatisticsAndDetailsService.getGameStatisticsByAllGamesAndPlayers(pageable);
+        Page<GameDTO> gameDTOs = gameStatisticsAndDetailsService.getGamesStatisticsByAllGamesAndPlayers(pageable);
         model.addAttribute("gameDTOs", gameDTOs);
         setLocalizedLoggedInUserName(model);
         setCurrentLocaleLanguage(model);
         return GAMES_STATISTICS_PAGE_REFEREE;
     }
 
-    @PostMapping("/referee/games/details")
+    @PostMapping("/referee/game/details")
     public String getGameDetailsForReferee(@RequestParam(value = "gameid", required = true) Long gameId, Model model) {
-        GameDTO gameDTO = gameStatisticsAndDetailsService.getGameFullStatisticsById(gameId);
+        GameDTO gameDTO = gameStatisticsAndDetailsService.getGameFullStatisticsByIdForReferee(gameId);
         model.addAttribute("gameDTO", gameDTO);
         model.addAttribute("appealStageFiled",
                 ResourceBundleUtil.getBundleStringForAppealStage(AppealStage.FILED.name()));

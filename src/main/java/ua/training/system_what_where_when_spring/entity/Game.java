@@ -10,6 +10,9 @@ import java.util.List;
 //TODO add constraints
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "game")
 public class Game {
     @Id

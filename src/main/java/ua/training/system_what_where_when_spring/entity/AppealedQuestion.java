@@ -1,11 +1,17 @@
 package ua.training.system_what_where_when_spring.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "appealed_question")
 public class AppealedQuestion {
 
@@ -18,7 +24,7 @@ public class AppealedQuestion {
     @JoinColumn(name = "question_id")
     private Question question;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "appeal_id")
     private Appeal appeal;
 }

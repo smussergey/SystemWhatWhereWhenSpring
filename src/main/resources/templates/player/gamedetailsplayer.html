@@ -36,12 +36,6 @@
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/player/games/statistics}" th:text="#{navbar.link.games.statistics}"></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   th:if="${gameDTO.appealPossible}"
-                   th:href="@{|/player/appeal/games/${gameDTO.id}|}"
-                   th:text="#{navbar.link.games.appeal}"></a>
-            </li>
         </ul>
         <ul class="navbar-nav my-2 my-lg-0">
             <li class="nav-item"
@@ -119,8 +113,17 @@
             </tr>
             </tbody>
         </table>
+
     </div>
-    
+
+    <div th:if="${gameDTO.appealPossible}">
+        <form th:action="@{/player/appeal/game}" method="post">
+            <input type="hidden" name="gameid" th:value="${gameDTO.id}">
+            <button class="button" type="submit"
+                    th:text="#{games.appeal.button.label.appeal}"></button>
+        </form>
+    </div>
+
 </div>
 
 <footer>

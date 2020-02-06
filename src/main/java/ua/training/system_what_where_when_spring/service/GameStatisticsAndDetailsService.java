@@ -12,6 +12,7 @@ import ua.training.system_what_where_when_spring.exception.EntityNotFoundExcepti
 import ua.training.system_what_where_when_spring.repository.GameRepository;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,83 +21,56 @@ import java.util.stream.Collectors;
 public class GameStatisticsAndDetailsService {
 
     private final UserService userService;
-    private final GameRepository gameRepository;
     private final QuestionService questionService;
-    private final GameDTOService gameDTOService;
+    private final GameService gameService;
 
-    public GameStatisticsAndDetailsService(UserService userService, GameRepository gameRepository, QuestionService questionService, GameDTOService gameDTOService) {
+    public GameStatisticsAndDetailsService(UserService userService, QuestionService questionService, GameService gameService) {
         this.userService = userService;
-        this.gameRepository = gameRepository;
         this.questionService = questionService;
-        this.gameDTOService = gameDTOService;
+        this.gameService = gameService;
     }
 
-    public Page<GameDTO> getGameStatisticsByAllGamesAndPlayers(Pageable pageable) {
-        return gameRepository.findAll(pageable)
-                .map(gameDTOService::toGameDTO);
+    public Page<GameDTO> getGamesStatisticsByAllGamesAndPlayers(Pageable pageable) {
+        return gameService.findAll(pageable)
+                .map(gameService::toGameDTO);
     }
 
-    public Page<GameDTO> getGamesStatisticsByLoggedInPlayer(Principal principal, Pageable pageable) throws EntityNotFoundException {
-        //TODO improve with Principal
+    public Page<GameDTO> getGamesStatisticsForLoggedInPlayer(Pageable pageable, Principal principal) throws EntityNotFoundException {
         User player = userService.findUserByLogin(principal.getName());
-        return gameRepository.findAllByFirstPlayerOrSecondPlayer(player, player, pageable)
-                .map(gameDTOService::toGameDTO);
+        return gameService.findAllByFirstPlayerOrSecondPlayer(player, player, pageable)
+                .map(gameService::toGameDTO);
     }
 
-    //    TODO forbid logged user to see not his game results
-    public GameDTO getGameFullStatisticsById(Long id) {
-        Game game = findGameById(id);
-        GameDTO gameDTO = gameDTOService.toGameDTO(game);
-        gameDTO.setQuestionDTOs(getQuestionDTOs(game));
-        //gameDTO.setAppealPossible(checkIfLoggedUserCanFileAppealAgainstGame(game)); //TODO
+    public GameDTO getGameFullStatisticsByIdForReferee(Long id) {
+        Game game = gameService.findById(id);
+        GameDTO gameDTO = gameService.toGameDTO(game);
+        gameDTO.setQuestionDTOs(questionService.extractQuestionDTOsFromGame(game));
 
         return gameDTO;
     }
 
-    private List<QuestionDTO> getQuestionDTOs(Game game) {
-        return game.getQuestions().stream()
-                .map(questionService::toQuestionDTO)
-                .collect(Collectors.toList());
+    public GameDTO getGameFullStatisticsByIdForPlayer(Long id) {
+        Game game = gameService.findById(id);
+        GameDTO gameDTO = gameService.toGameDTO(game);
+        gameDTO.setQuestionDTOs(questionService.extractQuestionDTOsFromGame(game));
+        gameDTO.setAppealPossible(checkIfLoggedInUserCanFileAppealAgainstGame(game));
+
+        return gameDTO;
     }
 
-    //    // TODO improve this method
-//    private boolean checkIfLoggedUserCanFileAppealAgainstGame(Game game) {
-//
-//        if (!game.getAppeals().isEmpty()) {
-//            return !game.getAppeals().stream()
-//                    .filter(appeal -> appeal.getUser().equals(userService.findLoggedIndUser()))
-//                    .findAny()
-//                    .isPresent();
-//        } else {
-//            return true;
-//        }
-//    }
-
-//    //TODO check/allow only user's games
-//    public GameDTO getGameFullStatisticsByIdForAppealForm(Long id) {
-//        User loggedInUser = userService.findLoggedIndUser();
-//        Game game = findGameById(id);
-//        GameDTO gameDTO = gameDTOService.toGameDTO(game);
-//
-//        List<QuestionDTO> answeredQuestions = game.getQuestions().stream()
-//                .map(answeredQuestionService::toAnsweredQuestionDTO)
-//                .peek(aqDTO -> {
-//                    if (!aqDTO.getNameWhoGotPointEn().equals(loggedInUser.getNameEn())) {
-//                        aqDTO.setAppealPossible(true);
-//                    } else {
-//                        aqDTO.setAppealPossible(false);
-//                    }
-//                })
-//                .collect(Collectors.toList());
-//
-//        gameDTO.setQuestionDTOS(answeredQuestions);
-//
-//        return gameDTO;
-//    }
-
-    public Game findGameById(Long id) {
-        return gameRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Can not fond games with id: " + id));
+    private boolean checkIfLoggedInUserCanFileAppealAgainstGame(Game game) {
+        return checkIfLoggedInUserCanFileAppealAgainstGameBecauseOfTime(game)
+                && (!checkIfLoggedInUserFiledAppealOnThisGame(game));
     }
 
+    private boolean checkIfLoggedInUserCanFileAppealAgainstGameBecauseOfTime(Game game) {
+        return game.getDate().isEqual(LocalDate.now());
+    }
+
+    private boolean checkIfLoggedInUserFiledAppealOnThisGame(Game game) {
+        return game.getAppeals().stream()
+                .filter(appeal -> appeal.getUser().equals(userService.findLoggedIndUser()))
+                .findAny()
+                .isPresent();
+    }
 }
