@@ -91,10 +91,10 @@
 
             <tr>
                 <td th:text="${gameDTO.date}"></td>
-                <td><span th:if="${lang.equals('en')}" th:text="${gameDTO.playerNameEn}"></span>
-                    <span th:if="${lang.equals('ua')}" th:text="${gameDTO.playerNameUa}"></span></td>
-                <td><span th:if="${lang.equals('en')}" th:text="${gameDTO.opponentNameEn}"></span>
-                    <span th:if="${lang.equals('ua')}" th:text="${gameDTO.opponentNameUa}"></span></td>
+                <td><span th:if="${lang.equals('en')}" th:text="${gameDTO.getFirstPlayerNameEn}"></span>
+                    <span th:if="${lang.equals('ua')}" th:text="${gameDTO.getFirstPlayerNameUa}"></span></td>
+                <td><span th:if="${lang.equals('en')}" th:text="${gameDTO.getSecondPlayerNameEn}"></span>
+                    <span th:if="${lang.equals('ua')}" th:text="${gameDTO.secondPlayerNameUa}"></span></td>
                 <td th:text="${gameDTO.scores}"></td>
                 <td th:text="${gameDTO.appealStage}"></td>
             </tr>
@@ -115,7 +115,7 @@
             </thead>
 
             <tbody>
-            <tr th:each="answeredQuestionDTO: ${gameDTO.answeredQuestionDTOs}">
+            <tr th:each="answeredQuestionDTO: ${gameDTO.questionDTOS}">
                 <td th:text="${answeredQuestionDTO.id}"></td>
                 <td><span th:if="${lang.equals('en')}" th:text="${answeredQuestionDTO.nameWhoGotPointEn}"></span>
                     <span th:if="${lang.equals('ua')}" th:text="${answeredQuestionDTO.nameWhoGotPointEn}"></span></td>

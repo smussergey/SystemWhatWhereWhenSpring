@@ -113,7 +113,7 @@
         </thead>
 
         <tbody>
-        <tr th:each="answeredQuestionDTO: ${gameDTO.answeredQuestionDTOs}">
+        <tr th:each="answeredQuestionDTO: ${gameDTO.questionDTOS}">
             <td th:text="${answeredQuestionDTO.id}"></td>
             <td><span th:if="${lang.equals('en')}" th:text="${answeredQuestionDTO.nameWhoGotPointEn}"></span>
                 <span th:if="${lang.equals('ua')}" th:text="${answeredQuestionDTO.nameWhoGotPointEn}"></span></td>
@@ -128,7 +128,7 @@
         <form th:action="@{/player/appeal/game/questions}" method="post">
             <div class="form-group">
                 <span th:if="${answeredQuestionDTO.appealPossible}"
-                      th:each="answeredQuestionDTO : ${gameDTO.answeredQuestionDTOs}">
+                      th:each="answeredQuestionDTO : ${gameDTO.questionDTOS}">
                         <input type="checkbox" name="ids"
                                th:text="${answeredQuestionDTO.id}"
                                th:value="${answeredQuestionDTO.id}" />
