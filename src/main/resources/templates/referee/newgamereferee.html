@@ -34,7 +34,8 @@
                 <a th:text="#{navbar.link.home.page}" class="nav-link" th:href="@{/referee/home}"></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/referee/games/statistics}" th:text="#{navbar.link.games.statistics}"></a>
+                <a class="nav-link" th:href="@{/referee/games/statistics}"
+                   th:text="#{navbar.link.games.statistics}"></a>
             </li>
         </ul>
         <ul class="navbar-nav my-2 my-lg-0">
@@ -66,10 +67,13 @@
 
 <div class="container" style="margin-top:30px">
     <h2 class="panel-title" th:text="#{new.game.form.header}"></h2>
+    <div class="form-input-error">
+        <span th:if="${error}" th:text="${error}"></span>
+    </div>
     <form th:action="@{'/referee/games/new'}" method="post">
         <div class="custom-control mb-3">
             <label th:text="#{games.new.game.team.label}" for="player"></label>
-            <select class="custom-select mb-3" id="player" th:name="playerid">
+            <select class="custom-select mb-3" id="player" th:name="firstplayerid">
                 <option th:if="${lang.equals('en')}"
                         th:each="player : ${players}"
                         th:value="${player.id}" th:text="${player.nameEn}">
@@ -82,11 +86,7 @@
         </div>
         <div class="custom-control mb-3">
             <label th:text="#{games.new.game.opponent.label}" for="opponent"></label>
-            <select class="custom-select mb-3" id="opponent" th:name="opponentid">
-<!--                TODO move to property  th:value="0"-->
-                <option
-                        th:value="0" th:text="#{games.new.game.option.label.opponent}">
-                </option>
+            <select class="custom-select mb-3" id="opponent" th:name="secondplayerid">
                 <option th:if="${lang.equals('en')}"
                         th:each="player : ${players}"
                         th:value="${player.id}" th:text="${player.nameEn}">
@@ -103,6 +103,7 @@
                    th:text="#{games.new.game.max.scores.label}"></label>
             <br>
             <input type="number" min="1" id="quantity"
+                   th:value="1"
                    th:name="maxscores" required/>
         </div>
         <button type="submit" class="btn btn-primary" th:text="#{games.game.new.label.button}"></button>
