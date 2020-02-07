@@ -6,8 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ua.training.system_what_where_when_spring.entity.Game;
 import ua.training.system_what_where_when_spring.entity.User;
 
-public interface GameRepository extends JpaRepository<Game, Long> {
-//    Page<Game> findAll(Pageable pageable);
+import java.time.LocalDate;
 
-    Page<Game> findAllByFirstPlayerOrSecondPlayer(User firstPlayer,User secondPlayer, Pageable pageable);
+public interface GameRepository extends JpaRepository<Game, Long> {
+    Page<Game> findAllByFirstPlayerOrSecondPlayer(User firstPlayer, User secondPlayer, Pageable pageable);
+
+    Page<Game> findAllByDateBefore(LocalDate localDate, Pageable pageable);
 }

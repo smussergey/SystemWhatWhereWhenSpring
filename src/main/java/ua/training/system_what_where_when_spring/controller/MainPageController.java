@@ -31,7 +31,7 @@ public class MainPageController {
 
     @RequestMapping("/")
     public String getMainPage(Model model, Principal principal) {
-        setCurrentLocaleLanguage(model);
+        addCurrentLocaleLanguageAttributeToModel(model);
 
         if (principal == null) {
             log.info("IN MainPageController - principal: {}", principal);
@@ -51,33 +51,33 @@ public class MainPageController {
 
     @GetMapping("/home")
     public String getDefaultPage(Model model) {
-        setCurrentLocaleLanguage(model);
+        addCurrentLocaleLanguageAttributeToModel(model);
         return HOME_PAGE_DEFAULT;
     }
 
     @GetMapping("/player/home")
     public String getHomePagePLAYER(Model model) {
-        setLocalizedLoggedInUserName(model);
-        setCurrentLocaleLanguage(model);
+        addLocalizedLoggedInUserNameToModel(model);
+        addCurrentLocaleLanguageAttributeToModel(model);
         return HOME_PAGE_PLAYER;
     }
 
     @GetMapping("/referee/home")
     public String getHomePageReferee(Model model) {
-        setLocalizedLoggedInUserName(model);
-        setCurrentLocaleLanguage(model);
+        addLocalizedLoggedInUserNameToModel(model);
+        addCurrentLocaleLanguageAttributeToModel(model);
         return HOME_PAGE_REFEREE;
     }
 
 
-    private Model setLocalizedLoggedInUserName(Model model) {
+    private Model addLocalizedLoggedInUserNameToModel(Model model) {
         User loggedInUser = userService.findLoggedIndUser();
         model.addAttribute("userNameEn", loggedInUser.getNameEn());
         model.addAttribute("userNameUa", loggedInUser.getNameUa());
         return model;
     }
 
-    private Model setCurrentLocaleLanguage(Model model) {
+    private Model addCurrentLocaleLanguageAttributeToModel(Model model) {
         model.addAttribute("lang", LocaleContextHolder.getLocale().getLanguage());
         return model;
     }

@@ -1,11 +1,11 @@
 package ua.training.system_what_where_when_spring.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.training.system_what_where_when_spring.dto.QuestionDTO;
-import ua.training.system_what_where_when_spring.entity.Appeal;
+import ua.training.system_what_where_when_spring.entity.AppealStage;
 import ua.training.system_what_where_when_spring.entity.Game;
 import ua.training.system_what_where_when_spring.entity.Question;
-import ua.training.system_what_where_when_spring.entity.AppealStage;
 import ua.training.system_what_where_when_spring.exception.EntityNotFoundException;
 import ua.training.system_what_where_when_spring.repository.QuestionRepository;
 import ua.training.system_what_where_when_spring.util.ResourceBundleUtil;
@@ -22,8 +22,8 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    //TODO refactor this method
-    public Question findByid(Long id) {
+
+    public Question findById(Long id) {
         return questionRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Can not fond question with id: " + id));
     }
@@ -52,7 +52,7 @@ public class QuestionService {
     }
 
     private void changeAppealStageForQuestionDTOIfAppealExists(Question question, QuestionDTO questionDTO, Game game) {
-        game.getAppeals().stream()
+        game.getAppeals()
                 .forEach(appeal -> appeal.getAppealedQuestions().stream()
                         .filter(appealedQuestion -> appealedQuestion.getQuestion().equals(question))
                         .findAny()
@@ -63,22 +63,7 @@ public class QuestionService {
                                         .name()))));
     }
 
-
-//        if(question.getAppeal()!=null)
-//
-//    {
-//        questionDTO.setAppealStage(
-//                ResourceBundleUtil.getBundleStringForAppealStage(
-//                        question.getAppeal().getAppealStage().name()));
-//
-//    } else questionDTO.setAppealStage(
-//            ResourceBundleUtil.getBundleStringForAppealStage(
-//            AppealStage.NOT_FILED.name()));
-//
-//
-//        return questionDTO;
-//}
-
+    @Transactional
     public List<Question> saveAll(List<Question> questions) {
         return questionRepository.saveAll(questions);
     }

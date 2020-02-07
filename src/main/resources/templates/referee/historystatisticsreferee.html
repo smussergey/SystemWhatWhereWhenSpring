@@ -86,10 +86,10 @@
             <tbody>
             <tr th:each="gameDTO: ${gameDTOs}">
                 <td th:text="${gameDTO.date}"></td>
-                <td><span th:if="${lang.equals('en')}" th:text="${gameDTO.playerNameEn}"></span>
-                    <span th:if="${lang.equals('ua')}" th:text="${gameDTO.playerNameUa}"></span></td>
-                <td><span th:if="${lang.equals('en')}" th:text="${gameDTO.opponentNameEn}"></span>
-                    <span th:if="${lang.equals('ua')}" th:text="${gameDTO.opponentNameUa}"></span></td>
+                <td><span th:if="${lang.equals('en')}" th:text="${gameDTO.firstPlayerNameEn}"></span>
+                    <span th:if="${lang.equals('ua')}" th:text="${gameDTO.firstPlayerNameUa}"></span></td>
+                <td><span th:if="${lang.equals('en')}" th:text="${gameDTO.secondPlayerNameEn}"></span>
+                    <span th:if="${lang.equals('ua')}" th:text="${gameDTO.secondPlayerNameUa}"></span></td>
                 <td th:text="${gameDTO.scores}"></td>
                 <td th:text="${gameDTO.appealStage}"></td>
             </tr>
@@ -100,7 +100,7 @@
         <nav th:if="${gameDTOs.totalPages > 1}">
             <ul class="pagination justify-content-center">
                 <li th:if="${gameDTOs.hasPrevious()}" class="page-item">
-                    <a th:href="@{/referee/games/statistics(page=${gameDTOs.number-1})}" class="page-link">
+                    <a th:href="@{/referee/history/games/statistics(page=${gameDTOs.number-1})}" class="page-link">
                         <span>&laquo;</span>
                     </a>
                 </li>
@@ -109,12 +109,12 @@
                     <li th:if="${gameDTOs.number == i}" class="page-item active"><span
                             class="page-link">[[${i}+1]]</span></li>
                     <li th:unless="${gameDTOs.number == i}" class="page-item">
-                        <a th:href="@{/referee/games/statistics(page=${i})}" class="page-link">[[${i}+1]]</a>
+                        <a th:href="@{/referee/history/games/statistics(page=${i})}" class="page-link">[[${i}+1]]</a>
                     </li>
                 </th:block>
 
                 <li th:if="${gameDTOs.hasNext()}" class="page-item">
-                    <a th:href="@{/referee/games/statistics(page=${gameDTOs.number+1})}" class="page-link">
+                    <a th:href="@{/referee/history/games/statistics(page=${gameDTOs.number+1})}" class="page-link">
                         <span>&raquo;</span>
                     </a>
                 </li>

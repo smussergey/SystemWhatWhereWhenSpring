@@ -58,9 +58,6 @@ public class NewGameController {
             model.addAttribute("error", "error.massage.two.players.cannot.be.the.same.name");
             return NEW_GAME_PAGE_REFEREE; //TODO add players names to model
         }
-//        newGameService.runNewGame(firstPlayerId, secondPlayerId, maxNumberOfScoresToFinishGame);
-//
-//        return REDIRECT_GAMES_STATISTICS_REFEREE;
     }
 
     private Model addLocalizedLoggedInUserNameToModel(Model model) {

@@ -40,12 +40,6 @@
                 <a class="nav-link" th:href="@{/referee/games/statistics}"
                    th:text="#{navbar.link.games.statistics}"></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   th:if="${gameDTO.appealStage.equals(appealStageFiled)}"
-                   th:href="@{|/referee/appeal/games/${gameDTO.id}|}"
-                   th:text="#{navbar.link.games.consider.appeal}"></a>
-            </li>
         </ul>
         <ul class="navbar-nav my-2 my-lg-0">
             <li class="nav-item"
@@ -78,7 +72,7 @@
 
     <div id="details">
         <table class="table table-striped table-hover table-bordered table-sm">
-            <h1 th:text="#{games.statistics.table.caption}"></h1>
+            <h1 th:text="#{game.statistics.table.caption}"></h1>
             <thead class="thead-light">
             <tr>
                 <th th:text="#{games.table.header.date}"></th>
@@ -101,33 +95,42 @@
             </tr>
             </tbody>
         </table>
-        </div>
-
-        <div id="qustions">
-            <table class="table table-striped table-hover table-bordered table-sm">
-                <h1 th:text="#{games.game.questions.details.table.caption}"></h1>
-                <thead class="thead-light">
-                <tr>
-                    <th th:text="#{games.game.table.header.question.id}"></th>
-                    <th th:text="#{games.game.table.header.name.who.got.point}"></th>
-                    <th th:text="#{games.table.header.appeal.stage}"></th>
-                </tr>
-                </thead>
-
-                <tbody>
-                <tr th:each="questionDTO: ${gameDTO.questionDTOs}">
-                    <td th:text="${questionDTO.id}"></td>
-                    <td><span th:if="${lang.equals('en')}" th:text="${questionDTO.nameWhoGotPointEn}"></span>
-                        <span th:if="${lang.equals('ua')}" th:text="${questionDTO.nameWhoGotPointEn}"></span></td>
-                    <td th:text="${questionDTO.appealStage}"></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
-    <footer>
-        <h5 th:text="#{text.footer}"></h5>
-    </footer>
+
+    <div id="qustions">
+        <table class="table table-striped table-hover table-bordered table-sm">
+            <h1 th:text="#{games.game.questions.details.table.caption}"></h1>
+            <thead class="thead-light">
+            <tr>
+                <th th:text="#{games.game.table.header.question.id}"></th>
+                <th th:text="#{games.game.table.header.name.who.got.point}"></th>
+                <th th:text="#{games.table.header.appeal.stage}"></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="questionDTO: ${gameDTO.questionDTOs}">
+                <td th:text="${questionDTO.id}"></td>
+                <td><span th:if="${lang.equals('en')}" th:text="${questionDTO.nameWhoGotPointEn}"></span>
+                    <span th:if="${lang.equals('ua')}" th:text="${questionDTO.nameWhoGotPointEn}"></span></td>
+                <td th:text="${questionDTO.appealStage}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${gameDTO.appealStage.equals(appealStageFiled)}">
+        <form th:action="@{/referee/appeal/game}" method="post">
+            <input type="hidden" name="gameid" th:value="${gameDTO.id}">
+            <button class="button" type="submit"
+                    th:text="#{games.appeal.button.label.consider.appeal}"></button>
+        </form>
+    </div>
+
+</div>
+<footer>
+    <h5 th:text="#{text.footer}"></h5>
+</footer>
 
 </body>
 

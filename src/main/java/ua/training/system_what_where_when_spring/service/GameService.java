@@ -13,6 +13,8 @@ import ua.training.system_what_where_when_spring.exception.EntityNotFoundExcepti
 import ua.training.system_what_where_when_spring.repository.GameRepository;
 import ua.training.system_what_where_when_spring.util.ResourceBundleUtil;
 
+import java.time.LocalDate;
+
 @Service
 public class GameService {
     private static final String DELIMITER = ":";
@@ -31,11 +33,18 @@ public class GameService {
         return gameRepository.findAllByFirstPlayerOrSecondPlayer(firstPlayer, secondPlayer, pageable);
     }
 
-
     public Page<Game> findAll(Pageable pageable) {
         return gameRepository.findAll(pageable);
     }
 
+    public Page<Game> findAllByDateAfter(LocalDate localDate, Pageable pageable) {
+        return gameRepository.findAllByDateBefore(localDate, pageable);
+    }
+
+    @Transactional
+    public Game save(Game game) {
+        return gameRepository.save(game);
+    }
 
     @Transactional
     public void deleteGameById(Long id) {
@@ -44,7 +53,7 @@ public class GameService {
 
 
     public GameDTO toGameDTO(Game game) {
-        GameDTO gameDTO = GameDTO.builder()
+        return GameDTO.builder()
                 .id(game.getId())
                 .date(game.getDate())//TODO LOCALE
                 .firstPlayerNameUa(game.getFirstPlayer().getNameUa())
@@ -52,27 +61,12 @@ public class GameService {
                 .secondPlayerNameUa(game.getSecondPlayer().getNameUa())
                 .secondPlayerNameEn(game.getSecondPlayer().getNameEn())
                 .scores(createScoresResults(game))
-                .appealStage(ResourceBundleUtil.getBundleStringForAppealStage(getAppealStageForGameDTO(game).name()))
-                .isAppealPossible(true)// TODO
+                .appealStage(ResourceBundleUtil.getBundleStringForAppealStage(getAppealStageForGame(game).name()))
+//                .isAppealPossible(true)// TODO check if it is needed
                 .build();
-
-//        if (game.getAppeals().isEmpty()) {
-//            gameDTO.setAppealStage(ResourceBundleUtil.getBundleStringForAppealStage(AppealStage.NOT_FILED.name()));
-//        } else {
-//            game.getAppeals().stream()
-//                    .forEach(appeal -> {
-//                        if (appeal.getAppealStage().equals(AppealStage.FILED)) {
-//                            gameDTO.setAppealStage(ResourceBundleUtil.getBundleStringForAppealStage(AppealStage.FILED.name()));
-//                        } else {
-//                            gameDTO.setAppealStage(ResourceBundleUtil.getBundleStringForAppealStage(AppealStage.CONSIDERED.name()));
-//                        }
-//
-//                    });
-//        }
-        return gameDTO;
     }
 
-    private String createScoresResults(Game game) {
+    public String createScoresResults(Game game) {
         User firstPlayer = game.getFirstPlayer();
 
         long firstPlayerScores = game.getQuestions()
@@ -82,15 +76,10 @@ public class GameService {
 
         long secondPlayerScores = game.getQuestions().size() - firstPlayerScores;
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(firstPlayerScores);
-        stringBuilder.append(DELIMITER);
-        stringBuilder.append(secondPlayerScores);
-
-        return stringBuilder.toString();
+        return firstPlayerScores + DELIMITER + secondPlayerScores;
     }
 
-    private AppealStage getAppealStageForGameDTO(Game game) {
+    public AppealStage getAppealStageForGame(Game game) {
         return game.getAppeals().stream()
                 .map(Appeal::getAppealStage)
                 .findFirst()

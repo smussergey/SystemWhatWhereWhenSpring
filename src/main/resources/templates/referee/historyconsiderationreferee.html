@@ -33,12 +33,12 @@
             <li class="nav-item">
                 <a th:text="#{navbar.link.home.page}" class="nav-link" th:href="@{/referee/home}"></a>
             </li>
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" th:href="@{/referee/games/statistics}"-->
+<!--                   th:text="#{navbar.link.games.statistics}"></a>-->
+<!--            </li>-->
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/referee/games/statistics}"
-                   th:text="#{navbar.link.games.statistics}"></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/referee/history/games}" th:text="#{navbar.link.history.games}"></a>
+                <a class="nav-link" th:href="@{/referee/history/games/statistics}" th:text="#{navbar.link.history.games}"></a>
             </li>
         </ul>
         <ul class="navbar-nav my-2 my-lg-0">
@@ -90,19 +90,47 @@
             <tbody>
             <tr th:each="gameDTO: ${gameDTOs}">
                 <td th:text="${gameDTO.date}"></td>
-                <td><span th:if="${lang.equals('en')}" th:text="${gameDTO.playerNameEn}"></span>
-                    <span th:if="${lang.equals('ua')}" th:text="${gameDTO.playerNameUa}"></span></td>
-                <td><span th:if="${lang.equals('en')}" th:text="${gameDTO.opponentNameEn}"></span>
-                    <span th:if="${lang.equals('ua')}" th:text="${gameDTO.opponentNameUa}"></span></td>
+                <td><span th:if="${lang.equals('en')}" th:text="${gameDTO.firstPlayerNameEn}"></span>
+                    <span th:if="${lang.equals('ua')}" th:text="${gameDTO.firstPlayerNameUa}"></span></td>
+                <td><span th:if="${lang.equals('en')}" th:text="${gameDTO.secondPlayerNameEn}"></span>
+                    <span th:if="${lang.equals('ua')}" th:text="${gameDTO.secondPlayerNameUa}"></span></td>
                 <td th:text="${gameDTO.scores}"></td>
                 <td th:text="${gameDTO.appealStage}"></td>
                 <td>
-                    <a th:href="@{|/referee/history/game/${gameDTO.id}|}"
-                       th:text="#{games.history.move.to.link.label.get}"></a>
+                    <form th:action="@{/referee/history/game}" method="post">
+                        <input type="hidden" name="gameid" th:value="${gameDTO.id}">
+                        <button class="button" type="submit"
+                                th:text="#{games.history.button.label.move}"></button>
+                    </form>
                 </td>
             </tr>
             </tbody>
         </table>
+
+        <!--pagination-->
+        <nav th:if="${gameDTOs.totalPages > 1}">
+            <ul class="pagination justify-content-center">
+                <li th:if="${gameDTOs.hasPrevious()}" class="page-item">
+                    <a th:href="@{/referee/history/consideration(page=${gameDTOs.number-1})}" class="page-link">
+                        <span>&laquo;</span>
+                    </a>
+                </li>
+
+                <th:block th:each="i: ${#numbers.sequence(0, gameDTOs.totalPages - 1)}">
+                    <li th:if="${gameDTOs.number == i}" class="page-item active"><span
+                            class="page-link">[[${i}+1]]</span></li>
+                    <li th:unless="${gameDTOs.number == i}" class="page-item">
+                        <a th:href="@{/referee/history/consideration(page=${i})}" class="page-link">[[${i}+1]]</a>
+                    </li>
+                </th:block>
+
+                <li th:if="${gameDTOs.hasNext()}" class="page-item">
+                    <a th:href="@{/referee/history/consideration(page=${gameDTOs.number+1})}" class="page-link">
+                        <span>&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
 
     </div>
 </div>

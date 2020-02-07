@@ -3,11 +3,10 @@ package ua.training.system_what_where_when_spring.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.training.system_what_where_when_spring.entity.Question;
 import ua.training.system_what_where_when_spring.entity.Game;
+import ua.training.system_what_where_when_spring.entity.Question;
 import ua.training.system_what_where_when_spring.entity.User;
 import ua.training.system_what_where_when_spring.exception.TwoPlayersTheSameException;
-import ua.training.system_what_where_when_spring.repository.GameRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,16 +18,16 @@ import java.util.concurrent.ThreadLocalRandom;
 public class NewGameService {
 
     private final UserService userService;
-    private final GameRepository gameRepository;
+    private final GameService gameService;
 
-    public NewGameService(UserService userService, GameRepository gameRepository) {
+    public NewGameService(UserService userService, GameService gameService) {
         this.userService = userService;
-        this.gameRepository = gameRepository;
+        this.gameService = gameService;
     }
 
     public Game runNewGame(Long firstPlayerId, Long secondPlayerId, int maxNumberOfScoresToFinishGame) {
 
-        if (firstPlayerId == secondPlayerId) {
+        if (firstPlayerId.equals(secondPlayerId)) {
             log.error("IN NewGameService, method runNewGame- firstPlayerId: {} secondPlayerId {} are the same", firstPlayerId, secondPlayerId);
             throw new TwoPlayersTheSameException("firstPlayerId and secondPlayerId are the same ");
         }
@@ -40,7 +39,7 @@ public class NewGameService {
 
     @Transactional
     public Game save(Game game) {
-        return gameRepository.save(game);
+        return gameService.save(game);
     }
 
     private Game generateNewGameWithResults(Long firstPlayerId, Long secondPlayerId, int maxNumberOfScoresToFinishGame) {
@@ -48,7 +47,7 @@ public class NewGameService {
         User firstPlayer = userService.findUserById(firstPlayerId);
         User secondPlayer = userService.findUserById(secondPlayerId);
 
-        List<Question> questions = generateQuestionsUntillMaxNumberOfScoresIsReached(firstPlayer, secondPlayer, maxNumberOfScoresToFinishGame);
+        List<Question> questions = generateQuestionsUntilMaxNumberOfScoresIsReached(firstPlayer, secondPlayer, maxNumberOfScoresToFinishGame);
 
         Game game = Game.builder()
                 .date(LocalDate.now())
@@ -56,15 +55,13 @@ public class NewGameService {
                 .secondPlayer(secondPlayer)
                 .questions(new ArrayList<>())
                 .build();
-//        System.out.println("------------------------" + game.getFirstPlayer());
-//        System.out.println("------------------------" + game.getQuestions().size());
-        game.addQuestions(questions);
+        game.addQuestions(questions);  // TODO check how o add to builder
 
         return game;
     }
 
-    private List<Question> generateQuestionsUntillMaxNumberOfScoresIsReached(User firstPlayer, User secondPlayer,
-                                                                             int maxNumberOfScoresToFinishGame) {
+    private List<Question> generateQuestionsUntilMaxNumberOfScoresIsReached(User firstPlayer, User secondPlayer,
+                                                                            int maxNumberOfScoresToFinishGame) {
         int firstPlayerScoresCount = 0;
         int secondPlayerScoresCount = 0;
         List<Question> questions = new ArrayList<>();

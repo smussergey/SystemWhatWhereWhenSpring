@@ -1,8 +1,12 @@
 package ua.training.system_what_where_when_spring.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 //TODO add constraints
 @Data
@@ -33,9 +37,19 @@ public class User {
     @Column(name = "role")
     private Role role;
 
-//    @Setter(AccessLevel.PRIVATE)
-//    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
-//    private List<Game> games = new ArrayList<>();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return id.equals(user.id) &&
+                email.equals(user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email);
+    }
 
     @Override
     public String toString() {

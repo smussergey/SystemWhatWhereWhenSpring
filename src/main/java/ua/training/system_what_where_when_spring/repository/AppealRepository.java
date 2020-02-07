@@ -7,5 +7,4 @@ import ua.training.system_what_where_when_spring.entity.AppealStage;
 import java.util.List;
 
 public interface AppealRepository extends JpaRepository<Appeal, Long> {
-    List<Appeal> findAllByAppealStage(AppealStage appealStage);
 }
