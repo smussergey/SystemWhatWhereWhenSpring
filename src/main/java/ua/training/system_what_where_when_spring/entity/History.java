@@ -18,20 +18,20 @@ import java.time.LocalDate;
 public class History {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "history_id")
+    @Column(name = "history_id", updatable = false, nullable = false)
     private Long id;
-    @Column(name = "date")
+    @Column(name = "date", nullable = false)
     private LocalDate date;
-    @Column(name = "first_player_name_ua")
+    @Column(name = "first_player_name_ua", nullable = false)
     private String firstPlayerNameUa;
-    @Column(name = "first_player_name_en")
+    @Column(name = "first_player_name_en", nullable = false)
     private String firstPlayerNameEn;
-    @Column(name = "second_player_name_ua")
+    @Column(name = "second_player_name_ua", nullable = false)
     private String secondPlayerNameUa;
-    @Column(name = "second_player_name_en")
+    @Column(name = "second_player_name_en", nullable = false)
     private String secondPlayerNameEn;
-    @Column(name = "scores")
+    @Column(name = "scores", nullable = false)
     private String scores;
-    @Column(name = "appeal_stage")
+    @Column(name = "appeal_stage", nullable = false)
     private String appealStage;
 }

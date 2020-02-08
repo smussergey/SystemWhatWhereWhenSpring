@@ -18,23 +18,23 @@ import java.util.Objects;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "user_id")
+    @Column(name = "user_id", updatable = false, nullable = false)
     private Long id;
 
-    @Column(name = "name_ua")
+    @Column(name = "name_ua", nullable = false)
     private String nameUa;
 
-    @Column(name = "name_en")
+    @Column(name = "name_en", nullable = false)
     private String nameEn;
 
-    @Column(name = "email")
+    @Column(name = "email",unique=true, nullable = false)
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     private Role role;
 
     @Override

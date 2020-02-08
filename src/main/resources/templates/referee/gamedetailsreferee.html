@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 
 <head>
-    <title th:text="#{games.game.details.page.title}"></title>
+    <title th:text="#{game.statistics.page.title}"></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -32,9 +32,6 @@
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
                 <a th:text="#{navbar.link.home.page}" class="nav-link" th:href="@{/referee/home}"></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/referee/games/new}" th:text="#{navbar.link.games.new}"></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/referee/games/statistics}"
@@ -75,11 +72,11 @@
             <h1 th:text="#{game.statistics.table.caption}"></h1>
             <thead class="thead-light">
             <tr>
-                <th th:text="#{games.table.header.date}"></th>
-                <th th:text="#{games.table.header.team}"></th>
-                <th th:text="#{games.table.header.team}"></th>
-                <th th:text="#{games.table.header.scores}"></th>
-                <th th:text="#{games.table.header.appeal.stage}"></th>
+                <th th:text="#{game.table.header.date}"></th>
+                <th th:text="#{game.table.header.player}"></th>
+                <th th:text="#{game.table.header.player}"></th>
+                <th th:text="#{game.table.header.scores}"></th>
+                <th th:text="#{game.table.header.appeal.stage}"></th>
             </tr>
             </thead>
 
@@ -99,12 +96,12 @@
 
     <div id="qustions">
         <table class="table table-striped table-hover table-bordered table-sm">
-            <h1 th:text="#{games.game.questions.details.table.caption}"></h1>
+            <h1 th:text="#{game.questions.table.caption}"></h1>
             <thead class="thead-light">
             <tr>
-                <th th:text="#{games.game.table.header.question.id}"></th>
-                <th th:text="#{games.game.table.header.name.who.got.point}"></th>
-                <th th:text="#{games.table.header.appeal.stage}"></th>
+                <th th:text="#{game.questions.table.header.question.id}"></th>
+                <th th:text="#{game.questions.table.header.player.who.got.point}"></th>
+                <th th:text="#{game.questions.table.header.appeal.stage}"></th>
             </tr>
             </thead>
 
@@ -112,7 +109,7 @@
             <tr th:each="questionDTO: ${gameDTO.questionDTOs}">
                 <td th:text="${questionDTO.id}"></td>
                 <td><span th:if="${lang.equals('en')}" th:text="${questionDTO.nameWhoGotPointEn}"></span>
-                    <span th:if="${lang.equals('ua')}" th:text="${questionDTO.nameWhoGotPointEn}"></span></td>
+                    <span th:if="${lang.equals('ua')}" th:text="${questionDTO.nameWhoGotPointUa}"></span></td>
                 <td th:text="${questionDTO.appealStage}"></td>
             </tr>
             </tbody>
@@ -123,7 +120,7 @@
         <form th:action="@{/referee/appeal/game}" method="post">
             <input type="hidden" name="gameid" th:value="${gameDTO.id}">
             <button class="button" type="submit"
-                    th:text="#{games.appeal.button.label.consider.appeal}"></button>
+                    th:text="#{game.appeal.button.label.consider.appeal}"></button>
         </form>
     </div>
 

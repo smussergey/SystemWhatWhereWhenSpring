@@ -12,15 +12,15 @@ import java.util.Objects;
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "question_id")
+    @Column(name = "question_id", updatable = false, nullable = false)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "game_id")
+    @JoinColumn(name = "game_id", nullable = false)
     private Game game;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User userWhoGotPoint;
 
     @Override

@@ -17,14 +17,14 @@ public class AppealedQuestion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "appealed_question_id")
+    @Column(name = "appealed_question_id", updatable = false, nullable = false)
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "question_id")
+    @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
     @ManyToOne
-    @JoinColumn(name = "appeal_id")
+    @JoinColumn(name = "appeal_id", nullable = false)
     private Appeal appeal;
 }

@@ -17,18 +17,18 @@ import java.util.List;
 public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "game_id")
+    @Column(name = "game_id", updatable = false, nullable = false)
     private Long id;
 
-    @Column(name = "date")
+    @Column(name = "date", nullable = false)
     private LocalDate date;
 
     @ManyToOne
-    @JoinColumn(name = "firstPlayer_user_id")
+    @JoinColumn(name = "firstPlayer_user_id", nullable = false)
     private User firstPlayer;
 
     @ManyToOne
-    @JoinColumn(name = "secondPlayer_user_id")
+    @JoinColumn(name = "secondPlayer_user_id", nullable = false)
     private User secondPlayer;
 
     @Setter(AccessLevel.PRIVATE)

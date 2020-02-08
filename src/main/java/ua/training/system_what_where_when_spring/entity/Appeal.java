@@ -17,22 +17,22 @@ import java.util.List;
 public class Appeal {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "appeal_id")
+    @Column(name = "appeal_id", updatable = false, nullable = false)
     private Long id;
 
-    @Column(name = "date")
+    @Column(name = "date", nullable = false)
     private LocalDate date;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "appeal_stage")
+    @Column(name = "appeal_stage", nullable = false)
     private AppealStage appealStage;
 
     @ManyToOne
-    @JoinColumn(name = "game_id")
+    @JoinColumn(name = "game_id", nullable = false)
     private Game game;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Setter(AccessLevel.PRIVATE)

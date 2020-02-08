@@ -54,7 +54,7 @@
 <div class="container">
     <h2 class="panel-title" th:text="#{registration.form.header}"></h2>
     <div class="form-input-error">
-        <span th:if="${emailerror}" th:text="#{registration.message.login.already.exists}"></span>
+        <span th:if="${emailerror}" th:text="#{registration.error.message.login.already.exists}"></span>
     </div>
     <div th:if="${fielderrors}" th:each="fielderror: ${fielderrors}" class="form-input-error">
         <span th:text="${fielderror}"></span>
@@ -64,32 +64,32 @@
         <!--        TODO check  newuser may be deleted -->
         <form th:action="@{/registration}" method="post" th:object="${newuser}">
             <div class="form-group">
-                <label th:text="#{registartion.label.nameUa}" for="nameUa"></label>
+                <label th:text="#{registration.field.label.nameUa}" for="nameUa"></label>
                 <input type="text" class="form-control" id="nameUa"
-                       th:placeholder="#{registartion.label.placeholder.nameUa}"
+                       th:placeholder="#{registration.field.placeholder.nameUa}"
                        name="nameUa">
             </div>
 
             <div class="form-group">
-                <label th:text="#{registartion.label.nameEn}" for="nameEn"></label>
+                <label th:text="#{registration.field.label.nameEn}" for="nameEn"></label>
                 <input type="text" class="form-control" id="nameEn"
-                       th:placeholder="#{registartion.label.placeholder.nameEn}"
+                       th:placeholder="#{registration.field.placeholder.nameEn}"
                        name="nameEn">
             </div>
 
             <div class="form-group">
-                <label th:text="#{registartion.label.login}" for="email"></label>
+                <label th:text="#{registration.field.label.login}" for="email"></label>
                 <input type="text" class="form-control" id="email"
-                       th:placeholder="#{registartion.label.placeholder.email}"
+                       th:placeholder="#{registration.field.placeholder.email}"
                        name="email">
             </div>
 
             <div class=" form-group">
-                <label th:text="#{registartion.label.password}" for="password"></label>
+                <label th:text="#{registration.field.label.password}" for="password"></label>
                 <input type="password" class="form-control" id="password"
-                       th:placeholder="#{registartion.label.placeholder.password}" name="password">
+                       th:placeholder="#{registration.field.placeholder.password}" name="password">
             </div>
-            <button type="submit" class="btn btn-primary" th:text="#{registration.label.button}"></button>
+            <button type="submit" class="btn btn-primary" th:text="#{registration.button.label.}"></button>
         </form>
     </div>
 </div>

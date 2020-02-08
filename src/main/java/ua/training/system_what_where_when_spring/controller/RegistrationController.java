@@ -40,7 +40,7 @@ public class RegistrationController {
             } catch (Exception ex) {
                 log.warn(userRegistrationDTO.getEmail() + " email is already exist");
                 addCurrentLocaleLanguageAttributeToModel(model);
-                model.addAttribute("emailerror", "registration.message.login.already.exists");
+                model.addAttribute("emailerror", "registration.error.message.login.already.exists");
                 return REGISTRATION_PAGE;
             }
         }

@@ -33,9 +33,6 @@
             <li class="nav-item">
                 <a th:text="#{navbar.link.home.page}" class="nav-link" th:href="@{/referee/home}"></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/referee/games/new}" th:text="#{navbar.link.games.new}"></a>
-            </li>
         </ul>
         <ul class="navbar-nav my-2 my-lg-0">
             <li class="nav-item"
@@ -66,7 +63,7 @@
 
 <div class="container" style="margin-top:30px">
     <div th:if=" ${gameDTOs.empty}">
-        <h1 th:text="#{requested.information.is.absent}"></h1>
+        <h1 th:text="#{game.message.requested.information.is.absent}"></h1>
     </div>
 
     <div th:if=" ${!gameDTOs.empty}" id="statistics">
@@ -74,12 +71,12 @@
             <h1 th:text="#{games.statistics.table.caption}"></h1>
             <thead class="thead-light">
             <tr>
-                <th th:text="#{games.table.header.date}"></th>
-                <th th:text="#{games.table.header.team}"></th>
-                <th th:text="#{games.table.header.team}"></th>
-                <th th:text="#{games.table.header.scores}"></th>
-                <th th:text="#{games.table.header.appeal.stage}"></th>
-                <th th:text="#{games.statistics.table.header.game.statistics.get}"></th>
+                <th th:text="#{game.table.header.date}"></th>
+                <th th:text="#{game.table.header.player}"></th>
+                <th th:text="#{game.table.header.player}"></th>
+                <th th:text="#{game.table.header.scores}"></th>
+                <th th:text="#{game.table.header.appeal.stage}"></th>
+                <th th:text="#{games.table.header.get.game.statistics}"></th>
             </tr>
             </thead>
 

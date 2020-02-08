@@ -18,8 +18,6 @@ import java.time.LocalDate;
 @Slf4j
 @Service
 public class HistoryService {
-    private static final String DELIMITER = ":";
-
 
     private final HistoryRepository historyRepository;
     private final GameService gameService;
