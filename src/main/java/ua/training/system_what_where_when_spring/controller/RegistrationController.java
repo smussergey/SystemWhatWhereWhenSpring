@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import ua.training.system_what_where_when_spring.dto.UserRegistrationDTO;
-import ua.training.system_what_where_when_spring.service.UserRegistrationService;
+import ua.training.system_what_where_when_spring.service.UserService;
 import ua.training.system_what_where_when_spring.util.validation.ValidationErrorBuilder;
 
 import javax.validation.Valid;
@@ -18,10 +18,10 @@ public class RegistrationController {
     private final static String REGISTRATION_PAGE = "registration";
     private final static String REDIRECT_LOGIN_PAGE = "redirect:/login";
 
-    private UserRegistrationService userRegistrationService;
+    private UserService userService;
 
-    public RegistrationController(UserRegistrationService userRegistrationService) {
-        this.userRegistrationService = userRegistrationService;
+    public RegistrationController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/registration")
@@ -35,7 +35,7 @@ public class RegistrationController {
                                   Errors errors, Model model) {
         if (!errors.hasErrors()) {
             try {
-                userRegistrationService.registerNewUser(userRegistrationDTO);
+                userService.registerNewUser(userRegistrationDTO);
                 return REDIRECT_LOGIN_PAGE;
             } catch (Exception ex) {
                 log.warn(userRegistrationDTO.getEmail() + " email is already exist");

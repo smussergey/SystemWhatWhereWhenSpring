@@ -20,7 +20,7 @@ import ua.training.system_what_where_when_spring.service.UserService;
 @Controller
 public class HistoryController {
     private final static String HISTORY_CONSIDERATION_PAGE_REFEREE = "referee/historyconsiderationreferee";
-    private final static String HISTORY_STATISTICS_PAGE_REFEREE = "referee/historystatisticsreferee";
+    private final static String HISTORY_GAMES_STATISTICS_PAGE_REFEREE = "referee/historygamesstatisticsreferee";
     private final static String REDIRECT_HISTORY_CONSIDERATION_PAGE_REFEREE = "redirect:/referee/history/consideration";
     private final static int DEFAULT_PAGINATION_SIZE = 5;
 
@@ -60,7 +60,7 @@ public class HistoryController {
 
         addLocalizedLoggedInUserNameToModel(model);
         addCurrentLocaleLanguageAttributeToModel(model);
-        return HISTORY_STATISTICS_PAGE_REFEREE;
+        return HISTORY_GAMES_STATISTICS_PAGE_REFEREE;
     }
 
     private Model addLocalizedLoggedInUserNameToModel(Model model) {

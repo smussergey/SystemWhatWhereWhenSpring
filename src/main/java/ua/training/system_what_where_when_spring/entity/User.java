@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Objects;
 
-//TODO add constraints
 @Data
 @Builder
 @NoArgsConstructor

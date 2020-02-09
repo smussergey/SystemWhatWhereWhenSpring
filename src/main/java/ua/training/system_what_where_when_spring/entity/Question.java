@@ -5,7 +5,6 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.Objects;
 
-//TODO add constraints
 @Data
 @Entity
 @Table(name = "question")

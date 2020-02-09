@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO add constraints
 @Data
 @Entity
 @Builder
@@ -32,12 +31,12 @@ public class Game {
     private User secondPlayer;
 
     @Setter(AccessLevel.PRIVATE)
-    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    private List<Appeal> appeals = new ArrayList<>();
+    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)  // TODO Check to use CascadeType.All
+    private List<Appeal> appeals = new ArrayList<>(); // TODO Check to use Set
 
     @Setter(AccessLevel.PRIVATE)
-    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    private List<Question> questions = new ArrayList<>();
+    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true) // TODO Check to use CascadeType.All
+    private List<Question> questions = new ArrayList<>(); // TODO Check to use Set
 
     public void addQuestions(List<Question> questions) {
         this.questions.addAll(questions);
