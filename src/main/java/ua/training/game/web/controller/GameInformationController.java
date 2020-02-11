@@ -9,6 +9,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.training.game.domain.User;
@@ -58,7 +59,7 @@ public class GameInformationController {
 
     @GetMapping("/referee/games/statistics")
     public String getGamesStatisticsForReferee(@PageableDefault(sort = "date", direction = Sort.Direction.DESC, size = DEFAULT_PAGINATION_SIZE)
-                                                           Pageable pageable, Model model) {
+                                                       Pageable pageable, Model model) {
         Page<GameDTO> gameDTOs = gameInformationService.getGamesStatisticsByAllGamesAndPlayers(pageable);
         model.addAttribute("gameDTOs", gameDTOs);
         addLocalizedLoggedInUserNameToModel(model);
@@ -66,9 +67,10 @@ public class GameInformationController {
         return GAMES_STATISTICS_PAGE_REFEREE;
     }
 
-    @PostMapping("/referee/game/details")
-    public String getGameDetailsForReferee(@RequestParam(value = "gameid") Long gameId, Model model) {
-        GameDTO gameDTO = gameInformationService.getGameFullStatisticsByIdForReferee(gameId);
+    //TODO Correct in servlet
+    @GetMapping("/referee/game/{id}") // TODO CHECK if wrong input
+    public String getGameDetailsForReferee(Model model, @PathVariable Long id) {
+        GameDTO gameDTO = gameInformationService.getGameFullStatisticsByIdForReferee(id);
         model.addAttribute("gameDTO", gameDTO);
         model.addAttribute("appealStageFiled",
                 ResourceBundleUtil.getBundleStringForAppealStage(AppealStage.FILED.name())); //TODO take into account date and 2 appeals

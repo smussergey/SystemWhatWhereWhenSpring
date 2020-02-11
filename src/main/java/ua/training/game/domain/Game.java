@@ -31,12 +31,12 @@ public class Game {
     private User secondPlayer;
 
     @Setter(AccessLevel.PRIVATE)
-    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
     // TODO Check to use CascadeType.All
     private List<Appeal> appeals = new ArrayList<>(); // TODO Check to use Set
 
     @Setter(AccessLevel.PRIVATE)
-    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
     // TODO Check to use CascadeType.All
     private List<Question> questions = new ArrayList<>(); // TODO Check to use Set
 

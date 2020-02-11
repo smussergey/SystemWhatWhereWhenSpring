@@ -47,8 +47,8 @@ public class HistoryService {
                 .firstPlayerNameEn(game.getFirstPlayer().getNameEn())
                 .secondPlayerNameUa(game.getSecondPlayer().getNameUa())
                 .secondPlayerNameEn(game.getSecondPlayer().getNameEn())
-                .scores(gameService.createScoresResults(game))
-                .appealStage(gameService.getAppealStageForGame(game).name())
+                .scores(gameService.createScoresResultsForGameDTO(game))
+                .appealStage(gameService.createAppealStageForGameDTO(game).name())
                 .build();
     }
 
@@ -80,7 +80,7 @@ public class HistoryService {
 
     private GameDTO historyToGameDTO(History history) {
         return GameDTO.builder()
-                .date(history.getDate())
+                .date(gameService.createLocalizedDateForGameDTO(history.getDate()))
                 .firstPlayerNameUa(history.getFirstPlayerNameUa())
                 .firstPlayerNameEn(history.getFirstPlayerNameEn())
                 .secondPlayerNameUa(history.getSecondPlayerNameUa())

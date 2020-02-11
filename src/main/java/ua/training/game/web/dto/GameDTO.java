@@ -2,7 +2,6 @@ package ua.training.game.web.dto;
 
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GameDTO {
     private Long id;
-    private LocalDate date;
+    private String date;
     private String firstPlayerNameUa;
     private String firstPlayerNameEn;
     private String secondPlayerNameUa;

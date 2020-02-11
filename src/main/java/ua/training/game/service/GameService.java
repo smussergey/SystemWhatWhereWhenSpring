@@ -1,5 +1,6 @@
 package ua.training.game.service;
 
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,8 @@ import ua.training.game.util.ResourceBundleUtil;
 import ua.training.game.web.dto.GameDTO;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @Service
 public class GameService {
@@ -55,18 +58,26 @@ public class GameService {
     public GameDTO toGameDTO(Game game) {
         return GameDTO.builder()
                 .id(game.getId())
-                .date(game.getDate())//TODO LOCALE
+                .date(createLocalizedDateForGameDTO(game.getDate()))
                 .firstPlayerNameUa(game.getFirstPlayer().getNameUa())
                 .firstPlayerNameEn(game.getFirstPlayer().getNameEn())
                 .secondPlayerNameUa(game.getSecondPlayer().getNameUa())
                 .secondPlayerNameEn(game.getSecondPlayer().getNameEn())
-                .scores(createScoresResults(game))
-                .appealStage(ResourceBundleUtil.getBundleStringForAppealStage(getAppealStageForGame(game).name()))
-//                .isAppealPossible(true)// TODO check if it is needed
+                .scores(createScoresResultsForGameDTO(game))
+                .appealStage(ResourceBundleUtil.getBundleStringForAppealStage(createAppealStageForGameDTO(game).name()))
                 .build();
     }
 
-    public String createScoresResults(Game game) {
+    public String createLocalizedDateForGameDTO(LocalDate localDate) {
+        Locale locale = LocaleContextHolder.getLocale();
+        if (locale.getLanguage().equals(new Locale("ua").getLanguage())) {
+            return localDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        } else {
+            return localDate.format(DateTimeFormatter.ofPattern("MM.dd.yyyy"));
+        }
+    }
+
+    public String createScoresResultsForGameDTO(Game game) {
         User firstPlayer = game.getFirstPlayer();
 
         long firstPlayerScores = game.getQuestions()
@@ -79,7 +90,7 @@ public class GameService {
         return firstPlayerScores + DELIMITER + secondPlayerScores;
     }
 
-    public AppealStage getAppealStageForGame(Game game) {
+    public AppealStage createAppealStageForGameDTO(Game game) {
         return game.getAppeals().stream()
                 .map(Appeal::getAppealStage)
                 .findFirst()
