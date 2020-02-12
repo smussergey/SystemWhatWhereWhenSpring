@@ -6,8 +6,7 @@ import java.util.ResourceBundle;
 
 public class ResourceBundleUtil {
     private static String APPEAL_STAGE = "appeal.stage.";
-    private static String GAME_STATUS = "game.status.";
-    private static String MESSAGES_BUNDLE_NAME = "locale/messages";
+    private static String MESSAGES_BUNDLE_NAME = "lang/messages";
     private static UTF8Control utf8Control = new UTF8Control();
 
     public static ResourceBundle getBundle() {

@@ -15,7 +15,7 @@ public class ValidationErrorBuilder {
         ValidationError validationError = new ValidationError();
         for (ObjectError objectError : errors.getAllErrors()) {
             validationError.addToErrorsList(ResourceBundleUtil.getBundleString(objectError.getDefaultMessage()));
-
+            System.out.println("--------------------Looking for bundle: " + objectError.getDefaultMessage());
         }
         return validationError;
     }

@@ -4,7 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.training.game.domain.Game;
 import ua.training.game.domain.User;
@@ -13,7 +17,10 @@ import ua.training.game.exception.TwoPlayersTheSameException;
 import ua.training.game.service.NewGameService;
 import ua.training.game.service.UserService;
 import ua.training.game.util.ResourceBundleUtil;
+import ua.training.game.util.validation.ValidationErrorBuilder;
+import ua.training.game.web.dto.NewGameFormDataDTO;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -21,7 +28,6 @@ import java.util.List;
 @RequestMapping("/referee")
 public class NewGameController {
     private final static String NEW_GAME_PAGE_REFEREE = "referee/newgamereferee";
-    private final static String REDIRECT_GAMES_STATISTICS_REFEREE = "redirect:/referee/games/statistics";
     private final static String REDIRECT_GAME_DETAILS_REFEREE = "redirect:/referee/game/";
     private final static String REDIRECT_NEW_GAME_REFEREE = "redirect:/referee/game/new";
 
@@ -34,7 +40,7 @@ public class NewGameController {
     }
 
     @GetMapping("/game/new")
-    public String getPreparedForNewGame(@ModelAttribute("error") String error, Model model) {
+    public String getPreparedForNewGame(@ModelAttribute("error") String error, @ModelAttribute("fielderrors") String fielderrors, Model model) {
         List<User> players = userService.findAllUsersByRole(Role.ROLE_PLAYER);
         model.addAttribute("players", players);
         addLocalizedLoggedInUserNameToModel(model);
@@ -42,27 +48,24 @@ public class NewGameController {
         return NEW_GAME_PAGE_REFEREE;
     }
 
-    @PostMapping("/game/new") //TODO add validation for maxNumberOfScoresToFinishGame
-    public String playNewGame(@RequestParam(value = "firstplayerid") Long firstPlayerId,
-                              @RequestParam(value = "secondplayerid") Long secondPlayerId,
-                              @RequestParam(value = "maxscores") int maxNumberOfScoresToFinishGame,
-                              Model model, RedirectAttributes redirectAttrs) {
-        log.info("IN playNewGame - firstPlayerId id: {} successfully was got", firstPlayerId);
-        log.info("IN playNewGame - secondPlayerId id: {} successfully was got", secondPlayerId);
-        log.info("IN playNewGame - number Of questions : {} successfully was got", maxNumberOfScoresToFinishGame);
-
-        try {
-            Game newGame = newGameService.runNewGame(firstPlayerId, secondPlayerId, maxNumberOfScoresToFinishGame);
-            return REDIRECT_GAME_DETAILS_REFEREE + newGame.getId(); //TODO add to servlet
-        } catch (TwoPlayersTheSameException ex) {
-            log.error("IN NewGameController, method playNewGame- firstPlayerId: {} secondPlayerId {} are the same", firstPlayerId, secondPlayerId);
-            addCurrentLocaleLanguageAttributeToModel(model);
-            addLocalizedLoggedInUserNameToModel(model);
-
-            redirectAttrs.addAttribute("error", ResourceBundleUtil.getBundleString("game.new.error.massage.two.players.cannot.be.the.same.name"));
-//            return "redirect:referee/game/new"; //TODO add players names to model
-            return REDIRECT_NEW_GAME_REFEREE; //TODO add players names to model
+    @PostMapping("/game/new") //TODO change in servlet
+    public String registerNewUser(@ModelAttribute("newgamedata") @Valid NewGameFormDataDTO newGameFormDataDTO,
+                                  Errors errors, Model model, RedirectAttributes redirectAttrs) {
+        if (!errors.hasErrors()) {
+            try {
+                Game newGame = newGameService.runNewGame(newGameFormDataDTO);
+                return REDIRECT_GAME_DETAILS_REFEREE + newGame.getId(); //TODO add to servlets
+            } catch (TwoPlayersTheSameException ex) {
+                log.error("In method playNewGame- firstPlayerId: {} secondPlayerId {} are the same", newGameFormDataDTO.getFirstPlayerId(), newGameFormDataDTO.getSecondPlayerId());
+                redirectAttrs.addAttribute("error", ResourceBundleUtil.getBundleString("game.new.error.massage.two.players.cannot.be.the.same.name"));
+                addCurrentLocaleLanguageAttributeToModel(model);
+                addLocalizedLoggedInUserNameToModel(model);
+                return REDIRECT_NEW_GAME_REFEREE; //TODO add players names to model
+            }
         }
+        addCurrentLocaleLanguageAttributeToModel(model);
+        redirectAttrs.addAttribute("fielderrors", ValidationErrorBuilder.fromBindingErrors(errors).getErrors());
+        return REDIRECT_NEW_GAME_REFEREE;
     }
 
     private Model addLocalizedLoggedInUserNameToModel(Model model) {

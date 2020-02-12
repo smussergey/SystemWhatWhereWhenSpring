@@ -7,6 +7,7 @@ import ua.training.game.domain.Game;
 import ua.training.game.domain.Question;
 import ua.training.game.domain.User;
 import ua.training.game.exception.TwoPlayersTheSameException;
+import ua.training.game.web.dto.NewGameFormDataDTO;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,7 +26,10 @@ public class NewGameService {
         this.gameService = gameService;
     }
 
-    public Game runNewGame(Long firstPlayerId, Long secondPlayerId, int maxNumberOfScoresToFinishGame) {
+    public Game runNewGame(NewGameFormDataDTO newGameFormDataDTO) {
+        Long firstPlayerId = Long.valueOf(newGameFormDataDTO.getFirstPlayerId());
+        Long secondPlayerId = Long.valueOf(newGameFormDataDTO.getSecondPlayerId());
+        int maxNumberOfScoresToFinishGame = Integer.valueOf(newGameFormDataDTO.getMaxScores());
 
         if (firstPlayerId.equals(secondPlayerId)) {
             log.error("IN NewGameService, method runNewGame- firstPlayerId: {} secondPlayerId {} are the same", firstPlayerId, secondPlayerId);

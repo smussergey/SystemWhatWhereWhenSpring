@@ -70,46 +70,52 @@
     <div class="form-input-error">
         <span th:if="${error}" th:text="${error}"></span>
     </div>
-    <form th:action="@{'/referee/game/new'}" method="post">
-        <div class="custom-control mb-3">
-            <label th:text="#{game.new.field.label.first.player}" for="player"></label>
-            <select class="custom-select mb-3" id="player" th:name="firstplayerid">
-                <option th:if="${lang.equals('en')}"
-                        th:each="player : ${players}"
-                        th:value="${player.id}" th:text="${player.nameEn}">
-                </option>
-                <option th:if="${lang.equals('ua')}"
-                        th:each="player : ${players}"
-                        th:value="${player.id}" th:text="${player.nameUa}">
-                </option>
-            </select>
-        </div>
-        <div class="custom-control mb-3">
-            <label th:text="#{game.new.field.label.second.player}" for="opponent"></label>
-            <select class="custom-select mb-3" id="opponent" th:name="secondplayerid">
-                <option th:if="${lang.equals('en')}"
-                        th:each="player : ${players}"
-                        th:value="${player.id}" th:text="${player.nameEn}">
-                </option>
-                <option th:if="${lang.equals('ua')}"
-                        th:each="player : ${players}"
-                        th:value="${player.id}" th:text="${player.nameUa}">
-                </option>
-            </select>
-        </div>
+    <div th:if="${fielderrors}" th:each="fielderror: ${fielderrors}" class="form-input-error">
+        <span th:text="${fielderror}"></span>
+    </div>
 
-        <div class="custom-control mb-3">
-            <label for="quantity"
-                   th:text="#{game.new.field.label.max.scores}"></label>
-            <br>
-            <input type="number" min="1" id="quantity"
-                   th:value="1"
-                   th:name="maxscores" required/>
-        </div>
-        <button type="submit" class="btn btn-primary" th:text="#{game.new.button.label}"></button>
-    </form>
+    <div class="panel-body">
+        <form th:action="@{'/referee/game/new'}" method="post" th:object="${newgamedata}">
+            <div class="custom-control mb-3">
+                <label th:text="#{game.new.field.label.first.player}" for="player"></label>
+                <select class="custom-select mb-3" id="player" name="firstPlayerId">
+                    <option th:if="${lang.equals('en')}"
+                            th:each="player : ${players}"
+                            th:value="${player.id}" th:text="${player.nameEn}">
+                    </option>
+                    <option th:if="${lang.equals('ua')}"
+                            th:each="player : ${players}"
+                            th:value="${player.id}" th:text="${player.nameUa}">
+                    </option>
+                </select>
+            </div>
+            <div class="custom-control mb-3">
+                <label th:text="#{game.new.field.label.second.player}" for="opponent"></label>
+                <select class="custom-select mb-3" id="opponent" name="secondPlayerId">
+                    <option th:if="${lang.equals('en')}"
+                            th:each="player : ${players}"
+                            th:value="${player.id}" th:text="${player.nameEn}">
+                    </option>
+                    <option th:if="${lang.equals('ua')}"
+                            th:each="player : ${players}"
+                            th:value="${player.id}" th:text="${player.nameUa}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="custom-control mb-3">
+                <label for="quantity"
+                       th:text="#{game.new.field.label.max.scores}"></label>
+                <br>
+                <!--            <input type="number" min="1" id="quantity" TODO correct-->
+                <input id="quantity"
+                       th:value="1"
+                       name="maxScores"/>
+            </div>
+            <button type="submit" class="btn btn-primary" th:text="#{game.new.button.label}"></button>
+        </form>
+    </div>
 </div>
-
 <footer>
     <h5 th:text="#{text.footer}"></h5>
 </footer>

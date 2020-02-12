@@ -13,6 +13,7 @@ import ua.training.game.repository.UserRepository;
 import ua.training.game.web.dto.UserRegistrationDTO;
 
 import java.util.List;
+import java.util.Optional;
 
 //TODO add logger to write to file
 @Slf4j
@@ -55,6 +56,12 @@ public class UserService {
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User with " + id + " was not found"));
     }
+
+    //TODO add to servlet
+    public Optional<User> findUserByIdAndRole(Long id, Role role) {
+        return userRepository.findByIdAndRole(id, role);
+    }
+
 
     public List<User> findAllUsersByRole(Role role) {
         return userRepository.findByRole(role);
