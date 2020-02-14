@@ -35,7 +35,7 @@ public class AppealGameController {
     }
 
 
-    @PostMapping("/player/appeal/game")
+    @PostMapping("/player/appeal/game") //TODO get ahd check user
     public String getAppealFormForGame(@RequestParam(value = "gameid") Long gameId,
                                        Principal principal, Model model) {
         GameDTO gameDTO = appealService.getGameInformationByIdForFileAppealForm(principal, gameId);
@@ -70,7 +70,7 @@ public class AppealGameController {
     public String approveAppealsAgainstGameAnsweredQuestions(@RequestParam(value = "ids") long[] ids, Model model) {
         if (ids.length > 0) {
             log.info("IN considerAppealedQuestions - appealed questions {} successfully were got", ids.length);
-            appealService.approveAppealsAgainstGameAnsweredQuestions(ids);
+            appealService.approveAppealsAgainstGameAppealedQuestions(ids);
         }
 
         return REDIRECT_GAMES_STATISTICS_REFEREE;

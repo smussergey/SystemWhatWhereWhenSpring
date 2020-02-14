@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ua.training.game.domain.Game;
 import ua.training.game.domain.User;
+import ua.training.game.exception.AccessNotAllowedException;
 import ua.training.game.exception.EntityNotFoundException;
 import ua.training.game.web.dto.GameDTO;
 
@@ -45,13 +46,22 @@ public class GameInformationService {
         return gameDTO;
     }
 
-    public GameDTO getGameFullStatisticsByIdForPlayer(Long id) {
+    public GameDTO getGameFullStatisticsByIdForPlayer(Long id, Principal principal) {
         Game game = gameService.findById(id);
+
+        if (!checkIfLoggedInUserCanRequestGameById(game, principal)){
+            throw new AccessNotAllowedException("Access denied");
+        }
         GameDTO gameDTO = gameService.toGameDTO(game);
         gameDTO.setQuestionDTOs(questionService.extractQuestionDTOsFromGame(game));
         gameDTO.setAppealPossible(checkIfLoggedInUserCanFileAppealAgainstGame(game));
 
         return gameDTO;
+    }
+
+    private boolean checkIfLoggedInUserCanRequestGameById(Game game, Principal principal) {
+        return game.getFirstPlayer().getEmail().equals(principal.getName())
+                || game.getSecondPlayer().getEmail().equals(principal.getName());
     }
 
     private boolean checkIfLoggedInUserCanFileAppealAgainstGame(Game game) {

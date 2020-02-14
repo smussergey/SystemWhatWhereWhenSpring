@@ -29,7 +29,7 @@ public class HistoryService {
     //TODO improve query to DB
     //TODO improve to get games when appeal was not filed and 1 (or 10) date passed
     public Page<GameDTO> getGamesWhichCanBeMovedToHistory(Pageable pageable) {
-        return gameService.findAllByDateAfter(LocalDate.now(), pageable)
+        return gameService.findAllByDateBefore(LocalDate.now(), pageable)
                 .map(gameService::toGameDTO);
     }
 
@@ -37,7 +37,7 @@ public class HistoryService {
         Game game = gameService.findById(id);
         History history = toHistory(game);
 
-        return saveToHistoryAndDeleteGameRecord(history, id);
+        return saveToHistoryAndDeleteGameRecord(history, game);
     }
 
     private History toHistory(Game game) {
@@ -53,10 +53,10 @@ public class HistoryService {
     }
 
     @Transactional
-    public boolean saveToHistoryAndDeleteGameRecord(History history, Long id) {
+    public boolean saveToHistoryAndDeleteGameRecord(History history, Game game) {
         try {
             save(history);
-            gameService.deleteGameById(id);
+            gameService.deleteGame(game);
             return true;
         } catch (Exception ex) {
             //TODO implement if needed

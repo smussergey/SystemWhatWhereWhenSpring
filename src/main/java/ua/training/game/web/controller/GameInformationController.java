@@ -10,10 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import ua.training.game.domain.User;
 import ua.training.game.enums.AppealStage;
+import ua.training.game.exception.AccessNotAllowedException;
 import ua.training.game.service.GameInformationService;
 import ua.training.game.service.UserService;
 import ua.training.game.util.ResourceBundleUtil;
@@ -28,6 +27,7 @@ public class GameInformationController {
     private final static String GAME_DETAILS_PAGE_PLAYER = "player/gamedetailsplayer";
     private final static String GAMES_STATISTICS_PAGE_REFEREE = "referee/gamesstatisticsreferee";
     private final static String GAME_DETAILS_PAGE_REFEREE = "referee/gamedetailsreferee";
+    private final static String ACCESS_DENIED_PAGE = "error/403";
     private final static int DEFAULT_PAGINATION_SIZE = 5;
 
     private final GameInformationService gameInformationService;
@@ -48,13 +48,18 @@ public class GameInformationController {
         return GAMES_STATISTICS_PAGE_PLAYER;
     }
 
-    @PostMapping("/player/game/details")
-    public String getGameDetailsForPlayer(@RequestParam(value = "gameid") Long gameId, Model model) {
-        GameDTO gameDTO = gameInformationService.getGameFullStatisticsByIdForPlayer(gameId);
-        model.addAttribute("gameDTO", gameDTO);
-        addLocalizedLoggedInUserNameToModel(model);
-        addCurrentLocaleLanguageAttributeToModel(model);
-        return GAME_DETAILS_PAGE_PLAYER;
+    @GetMapping("/player/game/{id}") // TODO CHECK if wrong input
+    public String getGameDetailsForPlayer(Model model, @PathVariable Long id, Principal principal) {
+        try {
+            GameDTO gameDTO = gameInformationService.getGameFullStatisticsByIdForPlayer(id, principal);
+            model.addAttribute("gameDTO", gameDTO);
+            addLocalizedLoggedInUserNameToModel(model);
+            addCurrentLocaleLanguageAttributeToModel(model);
+            return GAME_DETAILS_PAGE_PLAYER;
+        } catch (AccessNotAllowedException ex) {
+            log.warn("IN getGameDetailsForPlayer - user: {} is trying to get access to game {}, in which he didn't take part", principal.getName(), id);
+        }
+        return ACCESS_DENIED_PAGE;
     }
 
     @GetMapping("/referee/games/statistics")

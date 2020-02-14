@@ -43,7 +43,6 @@ public class HistoryController {
         return HISTORY_CONSIDERATION_PAGE_REFEREE;
     }
 
-    //TODO ?: change to delete or not
     @PostMapping("/referee/history/game")
     public String moveGameToHistory(@RequestParam(value = "gameid") Long gameId, Model model) {
         historyService.moveGameToHistory(gameId);

@@ -40,7 +40,7 @@ public class GameService {
         return gameRepository.findAll(pageable);
     }
 
-    public Page<Game> findAllByDateAfter(LocalDate localDate, Pageable pageable) {
+    public Page<Game> findAllByDateBefore(LocalDate localDate, Pageable pageable) {
         return gameRepository.findAllByDateBefore(localDate, pageable);
     }
 
@@ -50,8 +50,8 @@ public class GameService {
     }
 
     @Transactional
-    public void deleteGameById(Long id) {
-        gameRepository.deleteById(id);
+    public void deleteGame(Game game) {
+        gameRepository.delete(game);
     }
 
 

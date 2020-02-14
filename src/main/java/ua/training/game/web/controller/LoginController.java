@@ -17,8 +17,8 @@ public class LoginController {
     private final static String LOGIN_PAGE = "login";
 
     @GetMapping("/login")
-    public String getLogin(@RequestParam(value = "error", required = false) String error,
-                           @RequestParam(value = "logout", required = false) String logout,
+    public String getLogin(@RequestParam(value = "error") String error,
+                           @RequestParam(value = "logout") String logout,
                            Model model, HttpServletRequest request, Principal principal) {
         logoutUserIfWasLoggedIn(request, principal);
         model.addAttribute("error", error != null);

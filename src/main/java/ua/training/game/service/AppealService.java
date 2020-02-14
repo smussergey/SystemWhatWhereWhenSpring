@@ -108,7 +108,7 @@ public class AppealService {
         return appealRepository.save(appeal);
     }
 
-    public void approveAppealsAgainstGameAnsweredQuestions(long[] approvedQuestionIds) {
+    public void approveAppealsAgainstGameAppealedQuestions(long[] approvedQuestionIds) {
         log.info("in approveAppealAgainstGameAnsweredQuestions() - id []: {} successfully was got", approvedQuestionIds);
 
         List<Question> approvedQuestions = Arrays.stream(approvedQuestionIds)
